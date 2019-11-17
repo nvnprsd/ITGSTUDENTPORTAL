@@ -1,0 +1,126 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Library.master.cs" Inherits="Library" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder> <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+ <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css"/>
+    <!--===============================================================================================-->
+   
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="css/style2.css"/>
+     <!--====================================================for spacing between textbox and linkss======-->
+    <link rel="stylesheet" type="text/css" href="css/util.css"/>
+   <link rel="stylesheet" type="text/css" href="css/main2.css"/>   
+    <style type="text/css">
+     
+
+        @font-face {
+            font-family: Poppins-SemiBold;
+            src: url('../fonts/poppins/Poppins-SemiBold.ttf');
+        } select{
+            width:100%;
+        }
+       select, body, html {	
+            height: 100%;
+            	font-family: Poppins-Regular, sans-serif;
+
+        }
+      
+    </style>
+</head>
+<body>
+    <form id="form1" class=" validate-form" runat="server">
+    <div class="wrapper">
+       <nav id="sidebar" >
+                      <strong>     
+    
+                <br /><br />
+           <center>
+<img src="images/img_avatar.png"  alt="Avatar" style="width:150px;"/>
+            <br /> <a style="text-align:center">  <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+                </a> 
+                    </center>
+                           <asp:Label ID="name" runat="server" Text="Label"></asp:Label>
+                <asp:Label ID="username" runat="server" Text="Label" Visible="false"></asp:Label>
+            
+               
+                      <ul class="list-unstyled components">
+            <li>
+                    <a href="#">Home</a>
+                </li> 
+            <li>
+                <asp:LinkButton ID="home" runat="server" PostBackUrl="~/Library.aspx">Home</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="stock" runat="server" PostBackUrl="~/Lib_stocks.aspx">Check Stocks</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="addnew" runat="server" PostBackUrl="~/Lib_addnew.aspx">Add New Books</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="issue" runat="server" PostBackUrl="~/Lib_issueBook.aspx">Issue Or Return Books</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="find" runat="server" PostBackUrl="~/Lib_findbook.aspx">Search Book</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="sendnotice" runat="server"  PostBackUrl="~/Lib_notice.aspx">Send Notice</asp:LinkButton>
+            </li>
+            <li>
+                <asp:LinkButton ID="reportissue" runat="server"  PostBackUrl="~/Lib_issueTOdept.aspx">Report  Issue To Dept</asp:LinkButton>
+            </li>
+                     
+                        
+                        </ul>
+                           <ul>
+                <li>
+                    <asp:LinkButton ID="logout" runat="server" OnClick="logout_Click">Sign Out</asp:LinkButton>
+                </li>
+                <li>
+                    <a href="#">Tech Support</a>
+                </li></ul>
+                          </strong>
+                        </nav>
+
+                            <div id="content"> 
+                       <strong>  
+<span id="sidebarCollapse" style="cursor:pointer; margin-left:30px;">Menu</span><span><br />  &nbsp;</span></strong>
+                         <div id="ct">
+                 <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+
+                 </asp:ContentPlaceHolder>
+
+                         </div> 
+
+                     </div>
+                    </div>
+       
+       
+
+
+        <script src="css/jquery-3.3.1.slim.min.js"></script>
+
+    <script src="css/jquery.mCustomScrollbar.concat.min.js"></script>
+   <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar, #content').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+        </form>
+    <script src="js/main.js"></script>
+</body>
+</html>
