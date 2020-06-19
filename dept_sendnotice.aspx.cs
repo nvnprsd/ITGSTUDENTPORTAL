@@ -20,7 +20,9 @@ public partial class _Default : System.Web.UI.Page
     {
         if (Year.Text == "Select Year")
         {
-            Response.Write("Branch Must be selected");
+            
+
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "Branch Must be selected"), true);
         }
         else
         {
@@ -38,7 +40,8 @@ public partial class _Default : System.Web.UI.Page
             sq.Open();
             SqlCommand cmd = new SqlCommand(s, sq);
             cmd.ExecuteNonQuery();
-            Response.Write(m);
+
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", m), true);
             sq.Close();
         }
 

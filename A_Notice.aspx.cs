@@ -40,13 +40,16 @@ public partial class _Default : System.Web.UI.Page
                 sq.Open();
                 SqlCommand cmd = new SqlCommand(s, sq);
                 cmd.ExecuteNonQuery();
-                Response.Write(m);
+
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", m), true);
                 sq.Close();
             }
+            Server.Transfer("Admin.aspx");
         }
         catch (Exception ex)
         {
-            Response.Write(ex);
+
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
         }
     }
 }

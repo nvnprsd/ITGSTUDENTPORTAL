@@ -63,7 +63,7 @@
                          <asp:LinkButton ID="chkatten" runat="server" PostBackUrl="~/D_atten.aspx" >Check Attednance</asp:LinkButton>
                     </li>
                     <li>
-                         <asp:LinkButton ID="chkmrks" runat="server" Enabled="False" EnableTheming="False" EnableViewState="False" >Check Internal Marks</asp:LinkButton>
+                         <asp:LinkButton ID="chkmrks" runat="server" PostBackUrl="~/D_internalmarks.aspx" >Check Internal Marks</asp:LinkButton>
                     </li>
                    <li> 
                         <asp:LinkButton ID="uploadmrks" runat="server" OnClick="uploadmrks_Click" >Upload External Marks</asp:LinkButton>

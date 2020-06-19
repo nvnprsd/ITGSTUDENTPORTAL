@@ -79,10 +79,10 @@ public partial class _Default : System.Web.UI.Page
 
                     if (fileExtwnsion.ToLower() == ".doc" || fileExtwnsion.ToLower() == ".docx" || fileExtwnsion.ToLower() == ".pdf")
                     {
-                        Response.Write("file is ok");
+                        //Response.Write("file is ok");
                         if (Year.SelectedIndex == 0 || FileUpload1.FileContent == null)
                         {
-                            Response.Write("select any subject or valid file");
+                            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","select any subject or valid file"),true);
                         }
                         else
                         {
@@ -123,17 +123,22 @@ public partial class _Default : System.Web.UI.Page
 
                     }//file ext validation if block close
                     else
-                    { Response.Write("Please Select a Valid File"); }
+                    {
+                        ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Please Select a Valid File"),true);
+                    }
 
 
                 }// file upload  if block closed
                 else
-                { Response.Write("Please Select File"); }
+                {
+                    ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Please Select File"),true);
+                }
 
             }
             catch (Exception ex)
             {
-                Response.Write(ex);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
             }
         }
     }

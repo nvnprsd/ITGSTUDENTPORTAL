@@ -28,11 +28,13 @@ public partial class _Default : System.Web.UI.Page
 
                 string filename = Path.GetFileName(FileUpload1.FileName);
                 FileUpload1.SaveAs(Server.MapPath("~/vendor/CSResult"+Year.SelectedValue+".xls"));
-                Response.Write("Uploaded");
+
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "File Uploaded Successfully."), true);
             }
             else
             {
-                Response.Write("Expecting Excel File. ('__')");
+
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "Expecting Excel File. ('__')"), true);
             }
         }
     }

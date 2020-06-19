@@ -20,12 +20,12 @@ public partial class _Default : System.Web.UI.Page
     {
         if (Year.Text == "Select Year" || (DateTime.Parse(DateTime.Now.ToString("hh:mm")) <= DateTime.Parse("08:20") && DateTime.Parse(DateTime.Now.ToString("hh:mm")) >= DateTime.Parse("04:30")))
         {
-            Response.Write("Please Select Year or Invalid time for Class");
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Please Select Year or Invalid time for Class"),true);
         }
         else
         {
-            try
-            {
+            //try
+            //{
                 using (SqlConnection sq = new SqlConnection(cs))
                 {
                     sq.Open();
@@ -40,7 +40,7 @@ public partial class _Default : System.Web.UI.Page
                         rd.Read();
                         a = true;
                         fac = rd["name"].ToString();
-                        Response.Write("there is " + rd["name"].ToString() + " " + rd["username"].ToString() + " in your selected class press button again to forcefully enter in class");
+                    ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "there is " + rd["name"].ToString() + " " + rd["username"].ToString() + " in your selected class press button again to forcefully enter in class"), true) ;
 
                     }
                     rd.Close();
@@ -81,10 +81,10 @@ public partial class _Default : System.Web.UI.Page
 
                 }
 
-            }
-            catch (Exception ex)
+           // }
+            //catch (Exception ex)
             {
-                Response.Write("");
+            //    Response.Write("");
             }
         }
     }

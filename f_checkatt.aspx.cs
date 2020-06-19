@@ -175,7 +175,8 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
     }
 
@@ -205,7 +206,8 @@ protected void pr_Load(object sender, EventArgs e)
         }
         catch(Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
 
     }
@@ -215,17 +217,19 @@ protected void pr_Load(object sender, EventArgs e)
         try
         { using (SqlConnection sq = new SqlConnection(cs))
             {
+                gtt();
                 sq.Open();
                 SqlCommand cmd = new SqlCommand("update " + pclass + "att set fname" + at.Text.ToString() + "=NULL where date=convert(date, getdate())", sq);
                 SqlCommand cm = new SqlCommand("update  auth set location='NULL', cstatus='Free' where username='" + username.Text + "'", sq);
-                cmd.ExecuteNonQuery();
                 cm.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
                 sq.Close();
                  }
-            gtt();
+            
         }
         catch(Exception ex)
-        { Response.Write(ex);
+        {
+            Response.Write(ex);
         }
     }
     protected void abort_Click(object sender, EventArgs e)
@@ -246,7 +250,7 @@ protected void pr_Load(object sender, EventArgs e)
                 cmd.ExecuteNonQuery();
                 cm.ExecuteNonQuery();
                 sq.Close();
-                //Server.Transfer("f_takeclass.aspx");
+                Server.Transfer("f_takeclass.aspx");
             }
         }
 

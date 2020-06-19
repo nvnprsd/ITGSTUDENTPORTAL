@@ -34,13 +34,15 @@ public partial class _Default : System.Web.UI.Page
                 sq.Open();
                 SqlCommand cmd = new SqlCommand(cm, sq);
                 cmd.ExecuteNonQuery();
-                Response.Write(ms);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ms), true);
+
                 sq.Close();
             }
+            Server.Transfer("faculty.aspx");
         }
         catch (Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
         }
     }
 }

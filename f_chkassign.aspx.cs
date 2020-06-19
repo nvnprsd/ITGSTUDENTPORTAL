@@ -14,7 +14,7 @@ public partial class _Default : System.Web.UI.Page
     {
 
     }
-
+    string due = "";
     protected void DropDownList1_Load(object sender, EventArgs e)
     {
         try
@@ -31,7 +31,7 @@ public partial class _Default : System.Web.UI.Page
                     ListItem item = new ListItem();
                     item.Value = d["sub_name"].ToString();
                     item.Text = d["sub_name"].ToString() + " Due on " + d["duedate"].ToString();
-
+                    due= d["duedate"].ToString();
                     DropDownList1.Items.Add(item);
                 }
 
@@ -41,12 +41,13 @@ public partial class _Default : System.Web.UI.Page
 
             if(DropDownList1.SelectedItem==null)
             {
-                Response.Write("there is No Assignment given");
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","there is No Assignment given"),true);
             }
         }
         catch (Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
 
         }
     }
@@ -60,7 +61,7 @@ public partial class _Default : System.Web.UI.Page
             {
 
                 string dept = (Session["user"].ToString()).Substring(0, 2);
-                SqlCommand cmd = new SqlCommand("select * from " + dept + "submittedassignments where sub_name='" + DropDownList1.SelectedValue + "' ", sq);
+                SqlCommand cmd = new SqlCommand("select * from " + dept + "submittedassignments where sub_name='" + DropDownList1.SelectedValue + "' and duedate='"+due+"' ", sq);
                 sq.Open();
                 SqlDataReader rd = cmd.ExecuteReader();
                 if (!rd.HasRows)
@@ -80,7 +81,8 @@ public partial class _Default : System.Web.UI.Page
 
         catch (Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
     }
 }

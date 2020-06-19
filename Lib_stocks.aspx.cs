@@ -44,7 +44,8 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Response.Write("1" + ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
     }
 }

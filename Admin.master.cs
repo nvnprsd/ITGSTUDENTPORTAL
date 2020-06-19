@@ -38,7 +38,8 @@ public partial class Admin : System.Web.UI.MasterPage
             }
             catch (Exception ex)
             {
-                Response.Write(ex);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
             }
             logout.Text ="Sign Out";
         }

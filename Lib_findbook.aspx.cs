@@ -50,8 +50,25 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Response.Write("2" + ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
     }
 
+
+    protected void faculty_CheckedChanged(object sender, EventArgs e)
+    {
+        if(faculty.Checked==true)
+        {
+            Year.Visible = false;
+        }
+    }
+
+    protected void student_CheckedChanged(object sender, EventArgs e)
+    {
+        if (student.Checked == true)
+        {
+            Year.Visible = true;
+        }
+    }
 }

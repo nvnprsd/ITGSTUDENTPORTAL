@@ -42,9 +42,11 @@ protected void get_result_Click(object sender, EventArgs e)
             string abc = students.SelectedValue;
             OleDbCommand cmd = new OleDbCommand("Select * from [Sheet1$] where std_id='"+students.SelectedValue+"'", conn);
             OleDbDataReader rd = cmd.ExecuteReader();
-            rd.Read();
+            if (rd.HasRows)
+            {
+                rd.Read();
                 Document dt = new Document(PageSize.A4.Rotate(), 10, 10, 20, 10);
-                PdfWriter wr = PdfWriter.GetInstance(dt, new FileStream(path + DateTime.Now.Year + "studentresult.pdf", FileMode.Create));
+                PdfWriter wr = PdfWriter.GetInstance(dt, new FileStream(path + DateTime.Now.Year + "result.pdf", FileMode.Create));
                 dt.Open();//create a 'dt' size 'wr' named pdf file and open it.
                 BaseFont bfTimes = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);//define a font for file.
                 iTextSharp.text.Font subhead = new iTextSharp.text.Font(bfTimes, 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK);//modifying the font styling
@@ -56,9 +58,9 @@ protected void get_result_Click(object sender, EventArgs e)
 
                 Paragraph p2 = new Paragraph("Provisonal Marksheet" + Environment.NewLine + "B.TECH Year Specified (Session))" + Environment.NewLine + "Dept of Secfied Branch", subhead);
                 p2.Alignment = Element.ALIGN_CENTER;
-            
-               Paragraph p3 = new Paragraph("Name of Candidate  "+ rd["Student_name"].ToString().Replace("_"," ")+"                                                                                                                                                                                                     Enroll & Roll No."+ rd["Roll_No"].ToString().Replace("_", " ") + Environment.NewLine + "Father's Name "+ rd["Father_Name"].ToString().Replace("_", " ") + Environment.NewLine + "Name of Institute INSTITUTE OF TECHNOLOGY GOPESHWAR", subhead);
 
+                Paragraph p3 = new Paragraph("Name of Candidate  " + rd["Student_name"].ToString().Replace("_", " ") + "                                                                                                                                                                                                     Enroll & Roll No." + rd["Roll_No"].ToString().Replace("_", " ") + Environment.NewLine + "Father's Name " + rd["Father_Name"].ToString().Replace("_", " ") + Environment.NewLine + "Name of Institute INSTITUTE OF TECHNOLOGY GOPESHWAR", subhead);
+            
                 PdfPTable part = new PdfPTable(2);//#begining    table partition starts
                 part.WidthPercentage = 95;
                 float[] w = { 50f, 50f };
@@ -88,7 +90,7 @@ protected void get_result_Click(object sender, EventArgs e)
                 part3.AddCell(new Phrase("   Exam", bsubhead));
                 part3.AddCell(new Phrase("   Sess", bsubhead));
                 part3.AddCell(new Phrase("   Total", bsubhead));
-            
+
                 part3.AddCell(new Phrase("                       Theory", bsubhead));
                 part3.AddCell(new Phrase("   Exam", bsubhead));
                 part3.AddCell(new Phrase("   Sess.", bsubhead));
@@ -108,7 +110,7 @@ protected void get_result_Click(object sender, EventArgs e)
                 subs.AddCell(new Phrase(rd["OBsub1"].ToString(), subhead));
                 subs.AddCell(new Phrase(rd["SOsub1"].ToString(), subhead));
                 subs.AddCell(new Phrase(rd["TOsub1"].ToString(), subhead));
-               subs.SetWidths(w3);
+                subs.SetWidths(w3);
 
                 PdfPTable sub2 = new PdfPTable(14);//#Subjects    table partition starts
                 sub2.WidthPercentage = 95;
@@ -160,7 +162,7 @@ protected void get_result_Click(object sender, EventArgs e)
 
                 sub5.SetWidths(w3);
 
-                PdfPTable sub6= new PdfPTable(14);//#Subjects    table partition starts
+                PdfPTable sub6 = new PdfPTable(14);//#Subjects    table partition starts
                 sub6.WidthPercentage = 95;
                 sub6.AddCell(new Phrase("i th sem subject 1", subhead));
                 sub6.AddCell(new Phrase(rd["MMsub6"].ToString(), subhead));
@@ -214,9 +216,9 @@ protected void get_result_Click(object sender, EventArgs e)
                 prac2.AddCell(new Phrase(rd["Oprsub2"].ToString(), subhead));
                 prac2.AddCell(new Phrase(rd["Oprisub2"].ToString(), subhead));
                 prac2.AddCell(new Phrase(rd["OTsub2"].ToString(), subhead));
-              
 
-               prac2.SetWidths(w3);
+
+                prac2.SetWidths(w3);
 
                 PdfPTable prac3 = new PdfPTable(14);//#Prac_def    table partition starts
                 prac3.WidthPercentage = 95;
@@ -244,7 +246,7 @@ protected void get_result_Click(object sender, EventArgs e)
                 prac4.AddCell(new Phrase(rd["OTsub4"].ToString(), subhead));
 
 
-                  prac4.SetWidths(w3);
+                prac4.SetWidths(w3);
 
 
 
@@ -268,110 +270,110 @@ protected void get_result_Click(object sender, EventArgs e)
                 bottom.AddCell(new Phrase("Result", subhead));
 
                 bottom.AddCell(c);
-                bottom.AddCell(new Phrase(rd["grace"].ToString(),subhead));
-               
-              
+                bottom.AddCell(new Phrase(rd["grace"].ToString(), subhead));
+
+
                 bottom.SpacingBefore = 20;
 
-            PdfPTable bot2 = new PdfPTable(3);//#Prac_def    table partition starts
-            float[] ww2 = { .33f, .33f, .33f };
-            bot2.AddCell(new Phrase("i th Semester", subhead));
-            bot2.AddCell(new Phrase("i+1 th Semester", subhead));
-            bot2.AddCell(new Phrase("Grand Total", bsubhead));
-            bot2.AddCell(new Phrase(rd["Gtotal"].ToString() + "/" + rd["GMMtotal"].ToString(), subhead));
-            bot2.SetWidths(ww2);
-            int val = Convert.ToInt32(rd["Gtotal"]);
-            int val2 = Convert.ToInt32(rd["GMMtotal"]);
+                PdfPTable bot2 = new PdfPTable(3);//#Prac_def    table partition starts
+                float[] ww2 = { .33f, .33f, .33f };
+                bot2.AddCell(new Phrase("i th Semester", subhead));
+                bot2.AddCell(new Phrase("i+1 th Semester", subhead));
+                bot2.AddCell(new Phrase("Grand Total", bsubhead));
+                bot2.AddCell(new Phrase(rd["Gtotal"].ToString() + "/" + rd["GMMtotal"].ToString(), subhead));
+                bot2.SetWidths(ww2);
+                int val = Convert.ToInt32(rd["Gtotal"]);
+                int val2 = Convert.ToInt32(rd["GMMtotal"]);
 
-            rd.Close();
-            //iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance("D:/helll.png");
-            //img.ScaleToFit(120, 140);
-            //img.Alignment = Element.ALIGN_RIGHT;
+                rd.Close();
+                //iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance("D:/helll.png");
+                //img.ScaleToFit(120, 140);
+                //img.Alignment = Element.ALIGN_RIGHT;
 
-            cmd = new OleDbCommand("Select * from [Sheet2$] where std_id='"+students.SelectedValue+"'", conn);
-              rd = cmd.ExecuteReader();
-              rd.Read();
-            bot2.AddCell(new Phrase(rd["Gtotal"].ToString() + "/" + rd["GMMtotal"].ToString(), subhead));
-            bot2.AddCell(new Phrase((val+ Convert.ToInt32(rd["Gtotal"]))/2+"/"+ (val2 + Convert.ToInt32(rd["GMMtotal"]))/2, subhead));
-            PdfPCell c2 = new PdfPCell(bot2);
-            bottom.AddCell(c2);
-            bottom.AddCell(new Phrase("Passed", bsubhead));
-            bottom.SetWidths(w4);
+                cmd = new OleDbCommand("Select * from [Sheet2$] where std_id='" + students.SelectedValue + "'", conn);
+                rd = cmd.ExecuteReader();
+                rd.Read();
+                bot2.AddCell(new Phrase(rd["Gtotal"].ToString() + "/" + rd["GMMtotal"].ToString(), subhead));
+                bot2.AddCell(new Phrase((val + Convert.ToInt32(rd["Gtotal"])) / 2 + "/" + (val2 + Convert.ToInt32(rd["GMMtotal"])) / 2, subhead));
+                PdfPCell c2 = new PdfPCell(bot2);
+                bottom.AddCell(c2);
+                bottom.AddCell(new Phrase("Passed", bsubhead));
+                bottom.SetWidths(w4);
 
-            pracs.WidthPercentage = 95;
-            pracs.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
-            pracs.AddCell(new Phrase(rd["PRMsub1"].ToString(), subhead));
-            pracs.AddCell(new Phrase(rd["PRMisub1"].ToString(), subhead));
-            pracs.AddCell(new Phrase(rd["TPRsub1"].ToString(), subhead));
-            pracs.AddCell(new Phrase(rd["Oprsub1"].ToString(), subhead));
-            pracs.AddCell(new Phrase(rd["Oprisub1"].ToString(), subhead));
-            pracs.AddCell(new Phrase(rd["OTsub1"].ToString(), subhead));
-            prac2.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
-            prac2.AddCell(new Phrase(rd["PRMsub2"].ToString(), subhead));
-            prac2.AddCell(new Phrase(rd["PRMisub2"].ToString(), subhead));
-            prac2.AddCell(new Phrase(rd["TPRsub2"].ToString(), subhead));
-            prac2.AddCell(new Phrase(rd["Oprsub2"].ToString(), subhead));
-            prac2.AddCell(new Phrase(rd["Oprisub2"].ToString(), subhead));
-            prac2.AddCell(new Phrase(rd["OTsub2"].ToString(), subhead));
-            prac3.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
-            prac3.AddCell(new Phrase(rd["PRMsub3"].ToString(), subhead));
-            prac3.AddCell(new Phrase(rd["PRMisub3"].ToString(), subhead));
-            prac3.AddCell(new Phrase(rd["TPRsub3"].ToString(), subhead));
-            prac3.AddCell(new Phrase(rd["Oprsub3"].ToString(), subhead));
-            prac3.AddCell(new Phrase(rd["Oprisub3"].ToString(), subhead));
-            prac3.AddCell(new Phrase(rd["OTsub3"].ToString(), subhead));
-            prac4.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
-            prac4.AddCell(new Phrase(rd["PRMsub4"].ToString(), subhead));
-            prac4.AddCell(new Phrase(rd["PRMisub4"].ToString(), subhead));
-            prac4.AddCell(new Phrase(rd["TPRsub4"].ToString(), subhead));
-            prac4.AddCell(new Phrase(rd["Oprsub4"].ToString(), subhead));
-            prac4.AddCell(new Phrase(rd["Oprisub4"].ToString(), subhead));
-            prac4.AddCell(new Phrase(rd["OTsub4"].ToString(), subhead));
+                pracs.WidthPercentage = 95;
+                pracs.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
+                pracs.AddCell(new Phrase(rd["PRMsub1"].ToString(), subhead));
+                pracs.AddCell(new Phrase(rd["PRMisub1"].ToString(), subhead));
+                pracs.AddCell(new Phrase(rd["TPRsub1"].ToString(), subhead));
+                pracs.AddCell(new Phrase(rd["Oprsub1"].ToString(), subhead));
+                pracs.AddCell(new Phrase(rd["Oprisub1"].ToString(), subhead));
+                pracs.AddCell(new Phrase(rd["OTsub1"].ToString(), subhead));
+                prac2.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
+                prac2.AddCell(new Phrase(rd["PRMsub2"].ToString(), subhead));
+                prac2.AddCell(new Phrase(rd["PRMisub2"].ToString(), subhead));
+                prac2.AddCell(new Phrase(rd["TPRsub2"].ToString(), subhead));
+                prac2.AddCell(new Phrase(rd["Oprsub2"].ToString(), subhead));
+                prac2.AddCell(new Phrase(rd["Oprisub2"].ToString(), subhead));
+                prac2.AddCell(new Phrase(rd["OTsub2"].ToString(), subhead));
+                prac3.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
+                prac3.AddCell(new Phrase(rd["PRMsub3"].ToString(), subhead));
+                prac3.AddCell(new Phrase(rd["PRMisub3"].ToString(), subhead));
+                prac3.AddCell(new Phrase(rd["TPRsub3"].ToString(), subhead));
+                prac3.AddCell(new Phrase(rd["Oprsub3"].ToString(), subhead));
+                prac3.AddCell(new Phrase(rd["Oprisub3"].ToString(), subhead));
+                prac3.AddCell(new Phrase(rd["OTsub3"].ToString(), subhead));
+                prac4.AddCell(new Phrase("i=1th th sem Practical 1", subhead));
+                prac4.AddCell(new Phrase(rd["PRMsub4"].ToString(), subhead));
+                prac4.AddCell(new Phrase(rd["PRMisub4"].ToString(), subhead));
+                prac4.AddCell(new Phrase(rd["TPRsub4"].ToString(), subhead));
+                prac4.AddCell(new Phrase(rd["Oprsub4"].ToString(), subhead));
+                prac4.AddCell(new Phrase(rd["Oprisub4"].ToString(), subhead));
+                prac4.AddCell(new Phrase(rd["OTsub4"].ToString(), subhead));
 
-            part.AddCell(new Phrase("i+1 th semester", subhead));
-            subs.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            subs.AddCell(new Phrase(rd["MMsub1"].ToString(), subhead));
-            subs.AddCell(new Phrase(rd["SMsub1"].ToString(), subhead));
-            subs.AddCell(new Phrase(rd["TMsub1"].ToString(), subhead));
-            subs.AddCell(new Phrase(rd["OBsub1"].ToString(), subhead));
-            subs.AddCell(new Phrase(rd["SOsub1"].ToString(), subhead));
-            subs.AddCell(new Phrase(rd["TOsub1"].ToString(), subhead));
-            sub2.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            sub2.AddCell(new Phrase(rd["MMsub2"].ToString(), subhead));
-            sub2.AddCell(new Phrase(rd["SMsub2"].ToString(), subhead));
-            sub2.AddCell(new Phrase(rd["TMsub2"].ToString(), subhead));
-            sub2.AddCell(new Phrase(rd["OBsub2"].ToString(), subhead));
-            sub2.AddCell(new Phrase(rd["SOsub2"].ToString(), subhead));
-            sub2.AddCell(new Phrase(rd["TOsub2"].ToString(), subhead));
-            sub3.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            sub3.AddCell(new Phrase(rd["MMsub3"].ToString(), subhead));
-            sub3.AddCell(new Phrase(rd["SMsub3"].ToString(), subhead));
-            sub3.AddCell(new Phrase(rd["TMsub3"].ToString(), subhead));
-            sub3.AddCell(new Phrase(rd["OBsub3"].ToString(), subhead));
-            sub3.AddCell(new Phrase(rd["SOsub3"].ToString(), subhead));
-            sub3.AddCell(new Phrase(rd["TOsub3"].ToString(), subhead));
-            sub4.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            sub4.AddCell(new Phrase(rd["MMsub4"].ToString(), subhead));
-            sub4.AddCell(new Phrase(rd["SMsub4"].ToString(), subhead));
-            sub4.AddCell(new Phrase(rd["TMsub4"].ToString(), subhead));
-            sub4.AddCell(new Phrase(rd["OBsub4"].ToString(), subhead));
-            sub4.AddCell(new Phrase(rd["SOsub4"].ToString(), subhead));
-            sub4.AddCell(new Phrase(rd["TOsub4"].ToString(), subhead));
-            sub5.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            sub5.AddCell(new Phrase(rd["MMsub5"].ToString(), subhead));
-            sub5.AddCell(new Phrase(rd["SMsub5"].ToString(), subhead));
-            sub5.AddCell(new Phrase(rd["TMsub5"].ToString(), subhead));
-            sub5.AddCell(new Phrase(rd["OBsub5"].ToString(), subhead));
-            sub5.AddCell(new Phrase(rd["SOsub5"].ToString(), subhead));
-            sub5.AddCell(new Phrase(rd["TOsub5"].ToString(), subhead));
-            sub6.AddCell(new Phrase("i=1th th sem subject 1", subhead));
-            sub6.AddCell(new Phrase(rd["MMsub6"].ToString(), subhead));
-            sub6.AddCell(new Phrase(rd["SMsub6"].ToString(), subhead));
-            sub6.AddCell(new Phrase(rd["TMsub6"].ToString(), subhead));
-            sub6.AddCell(new Phrase(rd["OBsub6"].ToString(), subhead));
-            sub6.AddCell(new Phrase(rd["SOsub6"].ToString(), subhead));
-            sub6.AddCell(new Phrase(rd["TOsub6"].ToString(), subhead));
-
+                part.AddCell(new Phrase("i+1 th semester", subhead));
+                subs.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                subs.AddCell(new Phrase(rd["MMsub1"].ToString(), subhead));
+                subs.AddCell(new Phrase(rd["SMsub1"].ToString(), subhead));
+                subs.AddCell(new Phrase(rd["TMsub1"].ToString(), subhead));
+                subs.AddCell(new Phrase(rd["OBsub1"].ToString(), subhead));
+                subs.AddCell(new Phrase(rd["SOsub1"].ToString(), subhead));
+                subs.AddCell(new Phrase(rd["TOsub1"].ToString(), subhead));
+                sub2.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                sub2.AddCell(new Phrase(rd["MMsub2"].ToString(), subhead));
+                sub2.AddCell(new Phrase(rd["SMsub2"].ToString(), subhead));
+                sub2.AddCell(new Phrase(rd["TMsub2"].ToString(), subhead));
+                sub2.AddCell(new Phrase(rd["OBsub2"].ToString(), subhead));
+                sub2.AddCell(new Phrase(rd["SOsub2"].ToString(), subhead));
+                sub2.AddCell(new Phrase(rd["TOsub2"].ToString(), subhead));
+                sub3.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                sub3.AddCell(new Phrase(rd["MMsub3"].ToString(), subhead));
+                sub3.AddCell(new Phrase(rd["SMsub3"].ToString(), subhead));
+                sub3.AddCell(new Phrase(rd["TMsub3"].ToString(), subhead));
+                sub3.AddCell(new Phrase(rd["OBsub3"].ToString(), subhead));
+                sub3.AddCell(new Phrase(rd["SOsub3"].ToString(), subhead));
+                sub3.AddCell(new Phrase(rd["TOsub3"].ToString(), subhead));
+                sub4.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                sub4.AddCell(new Phrase(rd["MMsub4"].ToString(), subhead));
+                sub4.AddCell(new Phrase(rd["SMsub4"].ToString(), subhead));
+                sub4.AddCell(new Phrase(rd["TMsub4"].ToString(), subhead));
+                sub4.AddCell(new Phrase(rd["OBsub4"].ToString(), subhead));
+                sub4.AddCell(new Phrase(rd["SOsub4"].ToString(), subhead));
+                sub4.AddCell(new Phrase(rd["TOsub4"].ToString(), subhead));
+                sub5.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                sub5.AddCell(new Phrase(rd["MMsub5"].ToString(), subhead));
+                sub5.AddCell(new Phrase(rd["SMsub5"].ToString(), subhead));
+                sub5.AddCell(new Phrase(rd["TMsub5"].ToString(), subhead));
+                sub5.AddCell(new Phrase(rd["OBsub5"].ToString(), subhead));
+                sub5.AddCell(new Phrase(rd["SOsub5"].ToString(), subhead));
+                sub5.AddCell(new Phrase(rd["TOsub5"].ToString(), subhead));
+                sub6.AddCell(new Phrase("i=1th th sem subject 1", subhead));
+                sub6.AddCell(new Phrase(rd["MMsub6"].ToString(), subhead));
+                sub6.AddCell(new Phrase(rd["SMsub6"].ToString(), subhead));
+                sub6.AddCell(new Phrase(rd["TMsub6"].ToString(), subhead));
+                sub6.AddCell(new Phrase(rd["OBsub6"].ToString(), subhead));
+                sub6.AddCell(new Phrase(rd["SOsub6"].ToString(), subhead));
+                sub6.AddCell(new Phrase(rd["TOsub6"].ToString(), subhead));
+          
                  dt.Add(p1);
                 dt.Add(p2);
                 dt.Add(p3);
@@ -392,12 +394,19 @@ protected void get_result_Click(object sender, EventArgs e)
                 dt.Add(bottom);
             rd.Close();
             dt.Close();
-            
+                Response.Redirect(Session["user"].ToString()+"\\"+"Result\\"+ DateTime.Now.Year + "result.pdf");
+               
+            }
+            else
+            {
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "unable GetResult File Missing or No data Present" + Environment.NewLine + "Error code 12420" + Environment.NewLine), true);// + ex.ToString());
+
+            }
 
         }
         catch (Exception ex)
         {
-            Response.Write("unable GetResult File Missing or Inaccurate format" + Environment.NewLine + "Error code 12420" + Environment.NewLine);// + ex.ToString());
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex),true);// + ex.ToString());
 
         }
     }
@@ -421,7 +430,8 @@ protected void get_result_Click(object sender, EventArgs e)
         }
         catch (Exception ex)
         {
-            Response.Write(ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
 
     }

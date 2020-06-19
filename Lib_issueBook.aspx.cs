@@ -46,7 +46,7 @@ public partial class _Default : System.Web.UI.Page
                 while (r.Read())
                 {
                     a++;
-                    Response.Write(a);
+                   // Response.Write(a);
                     ListItem ls = new ListItem();
                     ls.Text = r["bookname"].ToString();
                     ls.Value = r["bookid"].ToString();
@@ -59,7 +59,8 @@ public partial class _Default : System.Web.UI.Page
         }
         catch (Exception ex)
         {
-            Response.Write("5" + ex);
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
         }
     }
 
@@ -69,7 +70,7 @@ public partial class _Default : System.Web.UI.Page
 
         if (a >= 8)
         {
-            Response.Write("Maximum bookes are issued i.e 8");
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Maximum bookes are issued i.e 8"),true);
         }
         else
         {
@@ -100,7 +101,7 @@ public partial class _Default : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                Response.Write("Books Serial number Doesn't exist or No copies of book is available" + ex);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Books Serial number Doesn't exist or No copies of book is available" + ex),true);
 
             }
 

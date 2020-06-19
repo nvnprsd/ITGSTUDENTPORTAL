@@ -20,7 +20,7 @@ public partial class _Default : System.Web.UI.Page
     {
         if (Branch.Text == "Select Branch" || Year.Text == "Select Year")
         {
-            Response.Write("Branch and Year Must be selected");
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Branch and Year Must be selected"),true);
         }
         else
         {
@@ -37,13 +37,15 @@ public partial class _Default : System.Web.UI.Page
                     sq.Open();
                     SqlCommand cmd = new SqlCommand(s, sq);
                     cmd.ExecuteNonQuery();
-                    Response.Write(m);
+                    ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", m), true);
+
                     sq.Close();
                 }
             }
             catch (Exception ex)
             {
-                Response.Write(ex);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
             }
         }
     }

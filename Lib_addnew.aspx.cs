@@ -29,11 +29,13 @@ public partial class _Default : System.Web.UI.Page
                 SqlCommand cmd = new SqlCommand("insert into " + Branch.SelectedValue + "books values('" + bid.Text + "','" + bname.Text + "','" + bauth.Text + "','" + copies.Text + "','" + copies.Text + "')", sq);
                 cmd.ExecuteNonQuery();
                 sq.Close();
-                Response.Write("Book Added");
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "Book Added"), true);
+
             }
             catch (Exception ex)
             {
-                Response.Write("3" + ex);
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
             }
         }
     }

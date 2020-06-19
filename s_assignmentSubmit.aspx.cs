@@ -67,7 +67,7 @@ public partial class _Default : System.Web.UI.Page
     {
         if (DropDownList1.Text == "Select Subject")
         {
-            Response.Write("Please Select Subject for Assignment");
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Please Select Subject for Assignment"),true);
         }
         else
         {
@@ -81,7 +81,7 @@ public partial class _Default : System.Web.UI.Page
                     {
                         if (DropDownList1.SelectedIndex == 0 || FileUpload1.FileContent == null)
                         {
-                            Response.Write("select any subject or valid file");
+                            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","select any subject or valid file"),true);
                         }
                         else
                         {
@@ -109,10 +109,21 @@ public partial class _Default : System.Web.UI.Page
                                 string path1 = "Assignments\\" + username.Text.Substring(0, 6) + "\\" + i + "Sem\\" + DropDownList1.SelectedValue + "\\" + Session["user"] + DateTime.Today.ToShortDateString() + extension;
 
                                 string l = Session["user"].ToString();
-                                SqlCommand cm = new SqlCommand("insert into " + (Session["user"].ToString()).Substring(0, 2) + "submittedassignments values('" + Session["user"].ToString() + "','" + DropDownList1.SelectedValue + "','" + i + "','10-02-2019','" + path1 + "')", sq);
+
                                 sq.Open();
 
-                                cm.ExecuteNonQuery();
+                                if (assignmentalreadysubmittedornot==true)//if assignment already submitted then replace older assignment otherwise insert new one
+                                {
+                                    SqlCommand cm = new SqlCommand("update  " + (Session["user"].ToString()).Substring(0, 2) + "submittedassignments set file_path='" + path1 + "' , submitdate='02-12-2020'", sq);
+
+                                    cm.ExecuteNonQuery();
+                                }
+                                else
+                                {
+                                    SqlCommand cm = new SqlCommand("insert into " + (Session["user"].ToString()).Substring(0, 2) + "submittedassignments values('" + Session["user"].ToString() + "','" + DropDownList1.SelectedValue + "','" + i + "','12-12-2020','" + path1 + "','" + due + "')", sq);
+
+                                    cm.ExecuteNonQuery();
+                                }
                                 sq.Close();
 
 
@@ -122,28 +133,32 @@ public partial class _Default : System.Web.UI.Page
 
                     }//file ext validation if block close
                     else
-                    { Response.Write("Please Select a Valid File"); }
+                    {
+                        ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","Please Select a Valid File"), true);
+                    }
 
 
 
                 }// file upload  if block closed
                 else
-                { Response.Write("Please Select File"); }
+                {
+                    ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", "Please Select File"),true);
+                }
 
 
             }
             catch (Exception ex)
             {
-                Response.Write("unable to submit" + ex.ToString());
+                ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ","unable to submit" + ex.ToString()),true);
             }
         }
     }
 
-   
-
+    string due = "";// for storing  due date of assignment
+    bool assignmentalreadysubmittedornot=false;
     protected void FileUpload1_Load(object sender, EventArgs e)
     {
-      
+        string subname="";// for storing  subject name  of assignment
                try
                 {
 
@@ -159,22 +174,30 @@ public partial class _Default : System.Web.UI.Page
                         while (d.Read())
                         {
                             ListItem item = new ListItem();
-                            item.Value = d["sub_name"].ToString();
+                          subname=  item.Value = d["sub_name"].ToString();
                             item.Text = d["sub_name"].ToString() + " Due on " + d["duedate"].ToString();
-
-                            DropDownList1.Items.Add(item);
+                    due= d["duedate"].ToString();
+                    DropDownList1.Items.Add(item);
                         }
-
+                
                         d.Close();
+                SqlCommand cmd = new SqlCommand("select * from " + (Session["user"].ToString()).Substring(0, 2) + "submittedassignments where std_id='" + Session["user"].ToString() + "' and sub_name='" + subname + "' and duedate='" + due + "' ", sq);
+                  SqlDataReader dr = cmd.ExecuteReader();
+                if(dr.HasRows)
+                {
+                    assignmentalreadysubmittedornot = true;
+                }
+
                         sq.Close();
                     }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-            Response.Write("Not submitted");
-                }
-            }
+            ScriptManager.RegisterStartupScript(Page, this.GetType(), "Key", string.Format("alert('{0}'); ", ex), true);
+
+        }
+    }
            
  }
     
